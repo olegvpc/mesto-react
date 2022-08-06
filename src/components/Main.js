@@ -3,7 +3,7 @@ import Card from "../components/Card.js"
 import api from "../utils/api.js";
 
 
-function Main (props) {
+function Main ({ onEditProfile, onEditAvatar, onAddPlace, onCardClick }) {
     // добавляем хуки стейтов
     const [userName, setUserName] = useState("");
     const [userDescription, setUserDescription] = useState("");
@@ -25,7 +25,7 @@ function Main (props) {
             })
     }, []) // не смотря на то что зависимости указаны нулевые, запрос по api (судя по Терминалу)
     // проходит два раза за данными пользователя - а затем два раза за данными карты. Можно сделать один -
-    // если убрать   </React.StrictMode>
+    // если убрать   </React.StrictMode> -  HEEELP
 
     useEffect(() => {
         api.getInitialCards()
@@ -48,32 +48,31 @@ function Main (props) {
                 <button type="button"
                         className="profile__avatar-btn"
                         aria-label="Обновить аватар"
-                        onClick={props.onEditAvatar}/>
+                        onClick={onEditAvatar}/>
             </div>
             <div className="profile__info">
               <h1 className="profile__name">{userName}</h1>
-              {/*Перенос текста должен превращаться в точки*/}
               <button className="profile__edit-btn transition"
                       title="Редактировать профиль"
                       type="button"
-                      onClick={props.onEditProfile}/>
+                      onClick={onEditProfile}/>
               <p className="profile__about">{userDescription}</p>
               {/*Перенос текста должен превращаться в точки*/}
             </div>
             <button className="profile__add-btn transition"
                     title="Добавить новую фотографию"
                     type="button"
-                    onClick={props.onAddPlace}/>
+                    onClick={onAddPlace}/>
           </section>
 
           <section className="cards">
             <ul className="cards__list">
 
-                {cards.map((card, i) => (
-                    <div key={i}>
+                {cards.map((card) => (
+                    <div key={card._id}>
                         <Card
                             card={card}
-                            onCardClick={props.onCardClick}
+                            onCardClick={onCardClick}
                         />
                     </div>
                     ))
