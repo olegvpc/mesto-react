@@ -4,22 +4,22 @@
 // FormName - add-photo, avatar, delete, profile
 // Title - Редактировать профиль, Обновить аватар, Новое место, Вы уверены?
 // buttonText - Сохранить (профили и аваар) Создать (add-photo)
-function PopupWithForm(props) {
+function PopupWithForm({ isOpen, name, title, buttonText, onClose, children }) {
     return (
-        <div className={`popup ${props.isOpen ? 'popup_opened' : ''}`}>
+        <div className={`popup ${isOpen && 'popup_opened'}`}>
           <div className="popup__container">
-            <h2 className="popup__title">{props.title}</h2>
+            <h2 className="popup__title">{title}</h2>
             <form className="popup__form" id="popup-form-add-photo"
-                  name={`form-${props.name}`} noValidate>
+                  name={`form-${name}`} noValidate>
               <fieldset className="popup__fieldset">
-                {props.children}
+                {children}
                 <button className="popup__button transition"
                         name="submit"
-                        type="submit">{props.buttonText}
+                        type="submit">{buttonText}
                 </button>
               </fieldset>
             </form>
-            <button onClick={props.onClose}
+            <button onClick={onClose}
                     aria-label="закрыть форму"
                     className="popup__btn-close transition"
                     id="popup-add-photo-btn-close" type="button"/>

@@ -11,6 +11,7 @@ function Card ({ card, onCardClick}) {
                     type="button"/>
             <img className="card__image"
                  onClick={handleClick}
+                 // onClick={() => {onCardClick(card)}}
                  src={card.link}
                  alt={`Изображение на фото ${card.name}`}/>
             <div className="card__wrapper">

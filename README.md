@@ -50,5 +50,4 @@ src={props.card?.link}
      src={card ? card.link : ''}/>             
 Стало:
 <img alt={card?.name} className="popup__photo" src={card?.link}/>
-              <p className="popup__image-title">{card?.name}</p>
 ```

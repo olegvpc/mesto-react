@@ -129,9 +129,12 @@ function App() {
                     autoComplete="off"
                     required
                 />
-                <p className='popup__input-error' id='avatar-link-error'/>
+            <span className='popup__input-error' id='avatar-link-error'>Error-avatar-link</span>
         </PopupWithForm>
-        <ImagePopup card={selectedCard} onClose={closeAllPopups} isOpen={isImagePopupOpen}/>
+        <ImagePopup
+            card={selectedCard}
+            onClose={closeAllPopups}
+            isOpen={isImagePopupOpen}/>
 
       </div>
       {/*Конец блока container*/}
