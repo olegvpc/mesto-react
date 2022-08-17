@@ -4,18 +4,20 @@
 // FormName - add-photo, avatar, delete, profile
 // Title - Редактировать профиль, Обновить аватар, Новое место, Вы уверены?
 // buttonText - Сохранить (профили и аваар) Создать (add-photo)
-function PopupWithForm({ isOpen, name, title, buttonText, onClose, children }) {
+function PopupWithForm({ isOpen, name, title, buttonText, onClose, onSubmit, disabled, children }) {
     return (
         <div className={`popup ${isOpen && 'popup_opened'}`}>
           <div className="popup__container">
             <h2 className="popup__title">{title}</h2>
             <form className="popup__form" id="popup-form-add-photo"
-                  name={`form-${name}`} noValidate>
+                  name={`form-${name}`} onSubmit={onSubmit} noValidate>
               <fieldset className="popup__fieldset">
                 {children}
-                <button className="popup__button transition"
+                <button className={`popup__button transition ${disabled && 'popup__button_disabled'}`}
                         name="submit"
-                        type="submit">{buttonText}
+                        type="submit"
+                        disabled={disabled}>
+                    {buttonText}
                 </button>
               </fieldset>
             </form>

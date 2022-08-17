@@ -68,28 +68,29 @@ class Api {
   };
 
   //   Установка лайка
-  likeCard(id) {
-    return fetch(`${this._baseUrl}/cards/likes/${id}`, {
-      method: 'PUT',
-      headers: this._headers
-    })
-    .then(this._checkResponse);
-  };
-    // Снятие лайков
-  dislikeCard(id) {
-    return fetch(`${this._baseUrl}/cards/likes/${id}`, {
+  changeLikeCardStatus(id, noLikes) {
+    if (noLikes) {
+      return fetch(`${this._baseUrl}/cards/likes/${id}`, {
+        method: 'PUT',
+        headers: this._headers
+      })
+      .then(this._checkResponse);
+    } else {
+        return fetch(`${this._baseUrl}/cards/likes/${id}`, {
         method: 'DELETE',
         headers: this._headers
-    })
-    .then(this._checkResponse)
-  };
+      })
+      .then(this._checkResponse)
+      }
+  }
+
     // Обновление аватара профиля
   updateUserAvatar(data) {
     return fetch(`${this._baseUrl}/users/me/avatar`, {
       method: 'PATCH',
       headers: this._headers,
       body: JSON.stringify({
-        avatar: data.avatarLink
+        avatar: data.avatar
       })
     })
     .then(this._checkResponse)

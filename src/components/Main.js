@@ -1,48 +1,20 @@
-import {useEffect, useState} from "react";
+import { useContext } from "react";
 import Card from "../components/Card.js"
-import api from "../utils/api.js";
+
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 
-function Main ({ onEditProfile, onEditAvatar, onAddPlace, onCardClick }) {
-    // добавляем хуки стейтов
-    const [userName, setUserName] = useState("");
-    const [userDescription, setUserDescription] = useState("");
-    const [userAvatar, setUserAvatar]= useState("");
-    // Стейт для карточки
-    const [cards, setCards] = useState([])
+function Main ({ onEditProfile, onEditAvatar, onAddPlace, onCardClick, cards, onCardLike, onCardDelete, onConfirm }) {
+    //Подписка на контекст CurrentUserContext
+    const currentUser = useContext(CurrentUserContext);
 
-    // добавляем хуки side-effects
-    useEffect(() => {
-        api.getUserInfo()
-            .then((userData) => {
-                setUserName(userData.name);
-                // debugger;
-                setUserDescription(userData.about);
-                setUserAvatar(userData.avatar);
-            })
-             .catch((err) => {
-                console.log(`ошибка получения данных по API ${err}`);
-            })
-    }, []) // не смотря на то что зависимости указаны нулевые, запрос по api (судя по Терминалу)
-    // проходит два раза за данными пользователя - а затем два раза за данными карты. Можно сделать один -
-    // если убрать   </React.StrictMode> -  HEEELP
-
-    useEffect(() => {
-        api.getInitialCards()
-            .then((cardsDataList) => {
-                setCards(cardsDataList);
-            })
-            .catch((err) => {
-            console.log(`ошибка получения данных пользователя ${err}`);
-            })
-    }, [])
 
     return (
          <main className="page__main content">
           <section className="profile">
             <div className="profile__avatar-container">
               <img className="profile__avatar"
-                   src={userAvatar}
+                   src={currentUser.avatar}
                    // style={{ backgroundImage: `url(${imagePath})` }}
                    alt="Аватар профиля" />
                 <button type="button"
@@ -51,12 +23,12 @@ function Main ({ onEditProfile, onEditAvatar, onAddPlace, onCardClick }) {
                         onClick={onEditAvatar}/>
             </div>
             <div className="profile__info">
-              <h1 className="profile__name">{userName}</h1>
+              <h1 className="profile__name">{currentUser.name}</h1>
               <button className="profile__edit-btn transition"
                       title="Редактировать профиль"
                       type="button"
                       onClick={onEditProfile}/>
-              <p className="profile__about">{userDescription}</p>
+              <p className="profile__about">{currentUser.about}</p>
               {/*Перенос текста должен превращаться в точки*/}
             </div>
             <button className="profile__add-btn transition"
@@ -73,6 +45,9 @@ function Main ({ onEditProfile, onEditAvatar, onAddPlace, onCardClick }) {
                         <Card
                             card={card}
                             onCardClick={onCardClick}
+                            onCardLike={onCardLike}
+                            onCardDelete={onCardDelete}
+                            onConfirm={onConfirm}
                         />
                     </div>
                     ))
