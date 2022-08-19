@@ -41,15 +41,14 @@ function Main ({ onEditProfile, onEditAvatar, onAddPlace, onCardClick, cards, on
             <ul className="cards__list">
 
                 {cards.map((card) => (
-                    <div key={card._id}>
-                        <Card
-                            card={card}
-                            onCardClick={onCardClick}
-                            onCardLike={onCardLike}
-                            onCardDelete={onCardDelete}
-                            onConfirm={onConfirm}
-                        />
-                    </div>
+                    <Card
+                        key={card._id}
+                        card={card}
+                        onCardClick={onCardClick}
+                        onCardLike={onCardLike}
+                        onCardDelete={onCardDelete}
+                        onConfirm={onConfirm}
+                    />
                     ))
                 }
 

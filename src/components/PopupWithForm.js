@@ -9,7 +9,7 @@ function PopupWithForm({ isOpen, name, title, buttonText, onClose, onSubmit, dis
         <div className={`popup ${isOpen && 'popup_opened'}`}>
           <div className="popup__container">
             <h2 className="popup__title">{title}</h2>
-            <form className="popup__form" id="popup-form-add-photo"
+            <form className="popup__form"
                   name={`form-${name}`} onSubmit={onSubmit} noValidate>
               <fieldset className="popup__fieldset">
                 {children}
@@ -24,7 +24,7 @@ function PopupWithForm({ isOpen, name, title, buttonText, onClose, onSubmit, dis
             <button onClick={onClose}
                     aria-label="закрыть форму"
                     className="popup__btn-close transition"
-                    id="popup-add-photo-btn-close" type="button"/>
+                    type="button"/>
           </div>
         </div>
     )

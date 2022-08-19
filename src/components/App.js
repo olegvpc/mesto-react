@@ -8,7 +8,7 @@ import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 import api from "../utils/api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
-import PopupWithForm from "./PopupWithForm";
+import ConfirmationPopup from "./ConfirmationPopup";
 
 function App() {
     // Стейты для popup (Принимает состояние - открыт-true/не открыт-false)
@@ -32,7 +32,7 @@ function App() {
                 setCards(cardsData);
             })
             .catch((err) => {
-                console.log(`ошибка получения данных по API ${err}`);
+                console.log(`ошибка получения данных по API при первичном обращении за карточками и юзером ${err}`);
             })
     }, [])
 
@@ -46,7 +46,10 @@ function App() {
                 // Формируем новый массив на основе имеющегося, подставляя в него новую карточку с сервера
                 // записываем новое состояние карты в State и обновляем / рендерим ВСЕ КАРТОЧКИ
                 setCards((prev) => prev.map((item) => item._id === card._id ? responsedCard : item));
-        });
+            })
+            .catch((err) => {
+              console.log(`ошибка получения данных по API при Лайке ${err}`);
+            });;
     }
 
     function handleCardDelete(card) {
@@ -56,8 +59,12 @@ function App() {
                 // console.log(responseDelete.message) // Пост удалён
                 // Формируем новый массив на основе имеющегося, не перенося в него удаленную карточку
                 // записываем новое состояние карт в State и обновляем / рендерим ВСЕ КАРТОЧКИ
-                return setCards((prev) => prev.filter((item) => item._id !== card._id));
-        });
+                setCards((prev) => prev.filter((item) => item._id !== card._id));
+                closeAllPopups()
+            })
+          .catch((err) => {
+              console.log(`ошибка получения данных по API при удалении ${err}`);
+            });
     }
 
     function handleUpdateUser(newUserData) {
@@ -71,7 +78,7 @@ function App() {
             closeAllPopups()
         })
         .catch((err) => {
-            console.log(`ошибка получения данных по API ${err}`);
+            console.log(`ошибка получения данных по API при изменении юзера ${err}`);
         })
         .finally(() => setIsLoading(false))
     }
@@ -86,7 +93,7 @@ function App() {
                 closeAllPopups()
             })
           .catch((err) => {
-              console.log(`ошибка получения данных по API ${err}`);
+              console.log(`ошибка получения данных по API при апдейте аватара ${err}`);
             })
             .finally(() => setIsLoading(false))
     }
@@ -125,12 +132,6 @@ function App() {
         setIsConfirmDeletePopupOpen(true)
         setSelectedCard(card)
     }
-    function handleSubmitDelete (event) {
-        event.preventDefault();
-
-        closeAllPopups()
-        handleCardDelete(selectedCard)
-    }
     // ----------дополнительное задание - подтверждение удаления
 
     function closeAllPopups () {
@@ -141,6 +142,25 @@ function App() {
       setIsConfirmDeletePopupOpen(false)
       // setSelectedCard({}); // пока не разобрался - но при убирании popup картинка исчезает быстрее креста popupa
     }
+    // ------- закрытие всех popup при Esc или клике на popup---------
+    const isOpen = isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || isImagePopupOpen || isConfirmDeletePopupOpen
+
+    useEffect(() => {
+        function closeByEscapeOrOutPopup(evt) {
+            if(evt.key === 'Escape' || evt.target.classList.contains("popup")) {
+                closeAllPopups();
+            }
+        }
+        if(isOpen) {
+            document.addEventListener('keydown', closeByEscapeOrOutPopup);
+            document.addEventListener("mousedown", closeByEscapeOrOutPopup);
+            return () => {
+                document.removeEventListener('keydown', closeByEscapeOrOutPopup);
+                document.addEventListener("mousedown", closeByEscapeOrOutPopup)
+            }
+        }
+    }, [isOpen])
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
         <div className="page">
@@ -177,16 +197,12 @@ function App() {
                 card={selectedCard}
                 onClose={closeAllPopups}
                 isOpen={isImagePopupOpen}/>
-            <PopupWithForm
+            <ConfirmationPopup
                 isOpen={isConfirmDeletePopupOpen}
                 onClose={closeAllPopups}
-                name="confirm"
-                title="Вы уверены?"
-                buttonText="Да"
-                onSubmit={handleSubmitDelete}
-                >
+                card={selectedCard}
+                onCardDelete={handleCardDelete}/>
 
-            </PopupWithForm>
           </div>
           {/*Конец блока container*/}
         </div>

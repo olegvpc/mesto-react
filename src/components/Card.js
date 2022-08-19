@@ -29,7 +29,7 @@ function Card ({ card, onCardClick, onCardLike, onCardDelete, onConfirm }) {
         onCardLike(card)
     }
 
-    function handleDeleteClick() {
+    function handleDelete() {
         // onCardDelete(card)
         onConfirm(card)
     }
@@ -38,7 +38,7 @@ function Card ({ card, onCardClick, onCardLike, onCardDelete, onConfirm }) {
         <li className="cards__item">
           <figure className="card">
             <button className={cardDeleteButtonClassName}
-                    type="button" onClick={handleDeleteClick}/>
+                    type="button" onClick={handleDelete}/>
             <img className="card__image"
                  onClick={handleClick}
                  src={card.link}

@@ -1,42 +1,24 @@
 import PopupWithForm from "./PopupWithForm";
-import {useState, useEffect, useContext} from "react";
-import { CurrentUserContext} from "../contexts/CurrentUserContext";
+import { useEffect, useContext } from "react";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import useFormAndValidation from "../hooks/useFormAndValidation";
 
 function EditProfilePopup ({ isOpen, isLoading, onClose, onUpdateUser }) {
-    const [name, setName] = useState("")
-    const [description, setDescription] = useState("")
+    const {values, handleChange, errors, isValid, setValues, setIsValid} = useFormAndValidation()
     // Подписка на контекст
     const currentUser = useContext(CurrentUserContext);
-    const [formValid, setFormValid] = useState(false)
-
-    // После загрузки текущего пользователя из API
-    // его данные будут использованы в управляемых компонентах.
-   useEffect(() => {
-       if (name !== currentUser.name || description !== currentUser.about) {
-           setFormValid(true)
-       }
-    }, [currentUser.name, currentUser.about, description, name] )
-
-
 
     useEffect(() => {
-        // если не ставить условие isOpen - в консоле предупреждение о возможных неуправляемых данных Input
-        if (isOpen) {
-            setName(currentUser.name);
-            setDescription(currentUser.about);
-            setFormValid(false)
-            // console.count("render useEffect") // в deps нужно указывать примитивы
+        if(isOpen) {
+            setValues({"name": currentUser.name, "about": currentUser.about})
         }
-    }, [isOpen, currentUser.name, currentUser.about])
-
-
-    function handleChangeName (event) {
-        setName(event.target.value)
-    }
-
-    function handleChangeDescription (event) {
-        setDescription(event.target.value)
-    }
+        setIsValid(false)
+    }, [isOpen, currentUser.name, currentUser.about, setIsValid, setValues])
+    // HELP ---------при первом рендиринге появляется ошибка в терминале
+    // Warning: A component is changing an uncontrolled input to be controlled.
+    //     This is likely caused by the value changing from undefined to a defined
+    // value, which should not happen. Decide between using a controlled or
+    // uncontrolled input element for the lifetime of the component.
 
     function handleSubmit(event) {
       // Запрещаем браузеру переходить по адресу формы
@@ -44,8 +26,8 @@ function EditProfilePopup ({ isOpen, isLoading, onClose, onUpdateUser }) {
 
       // Передаём значения управляемых компонентов во внешний обработчик
       onUpdateUser({
-        name: name,
-        about: description,
+        name: (isValid && values["name"]),
+        about: (isValid && values["about"]),
       });
 }
 
@@ -54,37 +36,36 @@ function EditProfilePopup ({ isOpen, isLoading, onClose, onUpdateUser }) {
             isOpen={isOpen}
             onClose={onClose}
             name="profile"
-            disabled={!formValid}
+            disabled={!isValid}
             title="Редактировать профиль"
             buttonText={isLoading ? "Сохранение..." : "Сохранить"}
             onSubmit={handleSubmit}>
 
             <input className="popup__input"
                id='popup-name'
-               maxLength="40" minLength="2"
+               maxLength="20" minLength="2"
                name="name"
                type="text"
                placeholder='Введите свое имя'
                autoComplete="off"
-               value={name}
-               onChange={handleChangeName}
+               value={values["name"]}
+               onChange={handleChange}
                required
             />
-            <span className="popup__input-error" id="popup-name-error">Error- text name</span>
+            <span className={`popup__input-error ${!isValid && 'popup__error_visible'}`} >{errors["name"]}</span>
             <input className="popup__input"
                id='popup-about'
-               maxLength="200" minLength="2"
+               maxLength="30" minLength="2"
                name="about"
                type="text"
                placeholder='Введите описание'
                autoComplete="off"
-               value={description}
-               onChange={handleChangeDescription}
+               value={values["about"]}
+               onChange={handleChange}
                required
             />
 
-            <span className="popup__input-error"
-                  id="popup-about-error">Error- text about</span>
+            <span className={`popup__input-error ${!isValid && 'popup__error_visible'}`}>{errors["about"]}</span>
         </PopupWithForm>
     )
 }
