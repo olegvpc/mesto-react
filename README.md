@@ -52,10 +52,11 @@ src={props.card?.link}
 <img alt={card?.name} className="popup__photo" src={card?.link}/>
 ```
 **Спринт 11:**
-- добавляем проект на компоненты - `App.js` , `Card.js` , `ImagePopup.js` ,
-- `PopupWithForm.js` , `Main.js` , `Header.js` , `Footer.js`
-+ `AddPlacePopup.js` , `EditAvatarPopup.js` , `EditProfilePopup.js`
-- дорабатываем Валидацию - очень интересная тема -
+- добавляем в проект доп компоненты- были `App.js` , `Card.js` , `ImagePopup.js` ,
+`PopupWithForm.js` , `Main.js` , `Header.js` , `Footer.js`
++ новые`AddPlacePopup.js` , `EditAvatarPopup.js` , `EditProfilePopup.js`, `ConfirmationPopup`
+#### Что новое из замечиний ревьюера: 
+- дорабатываем Валидацию - очень интересная тема: папка hooks- функция `useFormAndValidation`
 ```js
 
 import {useState, useCallback} from 'react';
@@ -64,16 +65,12 @@ export function useFormAndValidation() {
   const [ values, setValues ] = useState({});
   const [ errors, setErrors ] = useState({});
   const [ isValid, setIsValid ] = useState(true);
-
   const handleChange = (e) => {
     const {name, value} = e.target
     setValues({...values, [name]: value });
     setErrors({...errors, [name]: e.target.validationMessage});
     setIsValid(e.target.closest('form').checkValidity());
   };
-
-
-
   const resetForm = useCallback((newValues = {}, newErrors = {}, newIsValid = false) => {
     setValues(newValues);
     setErrors(newErrors);
@@ -82,8 +79,12 @@ export function useFormAndValidation() {
 
   return { values, handleChange, errors, isValid, resetForm, setValues, setIsValid };
 }
-
 ```
 ```js
   const {values, handleChange, errors, isValid, setValues, resetForm} = useFormAndValidation()
+```
+
+* Чтобы Реакт не ругался в консоли на то, что изначально в инпуты в value приходит значение undefined, нужно сделать вот такую проверку:
+```js
+value={values["name"] || ''}
 ```

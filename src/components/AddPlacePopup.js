@@ -3,20 +3,12 @@ import { useEffect } from "react";
 import useFormAndValidation from "../hooks/useFormAndValidation";
 
 function AddPlacePopup ({ isOpen, isLoading, onClose, onAddPlace }) {
-    const {values, handleChange, errors, isValid, setValues, resetForm} = useFormAndValidation()
+    const {values, handleChange, errors, isValid, resetForm} = useFormAndValidation()
 
+    // эффект для очитки формы про иткрытии popup
     useEffect(() => {
-        setValues({"name": "", "link": ""})
-        resetForm()
-    }, [isOpen, resetForm, setValues])
-
-    // useEffect(() => {
-    //     const urlExp = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi
-    //     const regex = new RegExp(urlExp)
-    //     if(cardName.length >= 2 && regex.test(String(cardLink).toLowerCase())) {
-    //         setFormValid(true)
-    //     } else setFormValid(false)
-    // }, [cardLink, cardName])
+        resetForm({name: "", link: ""})
+    }, [isOpen, resetForm])
 
     function handleSubmit (event) {
         event.preventDefault();
@@ -24,7 +16,6 @@ function AddPlacePopup ({ isOpen, isLoading, onClose, onAddPlace }) {
             name: (isValid && values["name"]),
             link: (isValid && values["link"])
         })
-        resetForm()
     }
 
     return (

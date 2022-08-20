@@ -14,11 +14,6 @@ function EditProfilePopup ({ isOpen, isLoading, onClose, onUpdateUser }) {
         }
         setIsValid(false)
     }, [isOpen, currentUser.name, currentUser.about, setIsValid, setValues])
-    // HELP ---------при первом рендиринге появляется ошибка в терминале
-    // Warning: A component is changing an uncontrolled input to be controlled.
-    //     This is likely caused by the value changing from undefined to a defined
-    // value, which should not happen. Decide between using a controlled or
-    // uncontrolled input element for the lifetime of the component.
 
     function handleSubmit(event) {
       // Запрещаем браузеру переходить по адресу формы
@@ -29,7 +24,7 @@ function EditProfilePopup ({ isOpen, isLoading, onClose, onUpdateUser }) {
         name: (isValid && values["name"]),
         about: (isValid && values["about"]),
       });
-}
+    }
 
     return (
         <PopupWithForm
@@ -42,27 +37,33 @@ function EditProfilePopup ({ isOpen, isLoading, onClose, onUpdateUser }) {
             onSubmit={handleSubmit}>
 
             <input className="popup__input"
-               id='popup-name'
-               maxLength="20" minLength="2"
-               name="name"
-               type="text"
-               placeholder='Введите свое имя'
-               autoComplete="off"
-               value={values["name"]}
-               onChange={handleChange}
-               required
+                id='popup-name'
+                maxLength="20" minLength="2"
+                name="name"
+                type="text"
+                placeholder='Введите свое имя'
+                autoComplete="off"
+                // Чтобы Реакт не ругался в консоли на то, что изначально в
+                // инпуты в value приходит значение undefined, нужно сделать
+                // вот такую проверку:
+                value={values["name"] || ''}
+                onChange={handleChange}
+                required
             />
             <span className={`popup__input-error ${!isValid && 'popup__error_visible'}`} >{errors["name"]}</span>
             <input className="popup__input"
-               id='popup-about'
-               maxLength="30" minLength="2"
-               name="about"
-               type="text"
-               placeholder='Введите описание'
-               autoComplete="off"
-               value={values["about"]}
-               onChange={handleChange}
-               required
+                id='popup-about'
+                maxLength="30" minLength="2"
+                name="about"
+                type="text"
+                placeholder='Введите описание'
+                autoComplete="off"
+                // Чтобы Реакт не ругался в консоли на то, что изначально в
+                // инпуты в value приходит значение undefined, нужно сделать
+                // вот такую проверку:
+                value={values["about"] || ''}
+                onChange={handleChange}
+                required
             />
 
             <span className={`popup__input-error ${!isValid && 'popup__error_visible'}`}>{errors["about"]}</span>
