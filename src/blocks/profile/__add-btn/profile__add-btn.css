@@ -4,7 +4,7 @@
   background-image: url('../../../images/add_button.svg');
   background-repeat: no-repeat;
   background-position: 50% 50%;
-  background-color: #000;
+  background-color: transparent;
   border: 2px solid #ffffff;
   outline: none;
   margin: 35px 0 auto auto;

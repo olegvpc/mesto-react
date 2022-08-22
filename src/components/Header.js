@@ -4,10 +4,10 @@ import logoPath from "../images/logo.svg";
 function Header () {
     return (
         <header className="page__header header">
-          <a href="#">
+          <div>
             <img className="header__logo transition" src={logoPath}
                  alt="логотип сайта Место" />
-          </a>
+          </div>
         </header>
     );
 }
