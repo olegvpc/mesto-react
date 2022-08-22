@@ -3,10 +3,9 @@
 ### Сайт, где можно делиться фотографиями из путешествий
 
 
+Cайт размещен в Pages  (gh-pages)
 
-Императивный сайт размещен в Pages  (gh-pages)
-
-[https://olegvpc.github.io/mesto/](https://olegvpc.github.io/mesto/)
+[https://olegvpc.github.io/mesto-react/](https://olegvpc.github.io/mesto-react/)
 
 ### Технологии
 
@@ -85,6 +84,6 @@ export function useFormAndValidation() {
 ```
 
 * Чтобы Реакт не ругался в консоли на то, что изначально в инпуты в value приходит значение undefined, нужно сделать вот такую проверку:
-```js
+```jsx
 value={values["name"] || ''}
 ```
